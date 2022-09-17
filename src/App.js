@@ -31,8 +31,7 @@ function App() {
 	let [count, setCount] = useState(localId || 0);
 	const [todo, setTodo] = useState(localData || []);
 	const [list, setList] = useState([]);
-	const [completedTodo, setCompletedTodo] = useState([]);
-	const [uncompletedTodo, setUncompletedTodo] = useState([]);
+	const [func, setFunc] = useState('');
 	const handleListAdd = (evt) => {
 		if (evt.code === 'Enter') {
 			setTodo([
@@ -66,16 +65,25 @@ function App() {
 	};
 	const handleAll = () => {
 		setList([...todo]);
+		setFunc('all');
 	};
 	const handleCompleted = () => {
 		setList(todo.filter((e) => e.checked === true));
+		setFunc('completed');
 	};
 	const handleUncompleted = () => {
 		setList(todo.filter((e) => e.checked !== true));
+		setFunc('uncompleted');
 	};
 
 	useEffect(() => {
-		setList([...todo]);
+		if (func === 'all') {
+			handleAll();
+		} else if (func == 'completed') {
+			handleCompleted();
+		} else if (func === 'uncompleted') {
+			handleUncompleted();
+		}
 	}, [todo]);
 
 	return (
@@ -93,6 +101,8 @@ function App() {
 					onKeyUp={handleListAdd}
 					id='outlined-basic'
 					label='Add Your Task'
+					required
+					autoComplete='off'
 					variant='outlined'
 					style={{ marginBottom: 30 }}
 				/>
